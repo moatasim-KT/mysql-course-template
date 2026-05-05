@@ -21,10 +21,16 @@ jobs:
         with:
           python-version: '3.10'
       - name: Install dependencies
-        run: pip install mysql-connector-python
+        run: pip install mysql-connector-python pandas
       - name: Setup Database Schema
-        # Assumes schema.sql is at the root. For more complex setups, might need to run multiple schema files.
         run: mysql -h 127.0.0.1 -u root -prootpassword employees_db < schema.sql
+      - name: Setup Data
+        env:
+          DB_HOST: 127.0.0.1
+          DB_USER: root
+          DB_PASSWORD: rootpassword
+          DB_NAME: employees_db
+        run: python3 setup_data.py
       - name: Run All Tests
         env:
           DB_HOST: 127.0.0.1
