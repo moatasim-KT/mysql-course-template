@@ -1,0 +1,34 @@
+name: Run SQL Tests
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: employees_db
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install mysql-connector-python
+      - name: Setup Database Schema
+        # Assumes schema.sql is at the root. For more complex setups, might need to run multiple schema files.
+        run: mysql -h 127.0.0.1 -u root -prootpassword employees_db < schema.sql
+      - name: Run All Tests
+        env:
+          DB_HOST: 127.0.0.1
+          DB_USER: root
+          DB_PASSWORD: rootpassword
+          DB_NAME: employees_db
+        run: python3 -m unittest discover tests

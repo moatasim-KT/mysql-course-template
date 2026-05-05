@@ -1,0 +1,6 @@
+review_id,employee_id,review_date,performance_score,review_comments
+1,1,2023-01-20,4,Great contributor
+2,2,2023-01-22,5,Excellent technical skills
+3,3,2023-01-25,3,Needs improvement in communication
+4,4,2023-01-27,4,Consistent performance
+5,5,2023-01-30,5,Exceptional leadership
